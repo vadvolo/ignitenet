@@ -1,0 +1,10 @@
+# Prometheus scrape job for ignitenet-proxy.
+# Add under `scrape_configs:` in your prometheus.yml and reload Prometheus.
+
+- job_name: ignitenet-proxy
+  metrics_path: /metrics
+  static_configs:
+    - targets:
+        - "<proxy-host>:8881"
+      labels:
+        service: ignitenet-proxy

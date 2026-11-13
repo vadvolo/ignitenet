@@ -1,0 +1,21 @@
+name: build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+      - run: go vet ./...
+      - run: go build -trimpath -ldflags="-s -w" -o ignitenet-proxy .
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ignitenet-proxy-linux-amd64
+          path: ignitenet-proxy

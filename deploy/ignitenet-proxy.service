@@ -1,0 +1,29 @@
+[Unit]
+Description=IgniteNet device data proxy
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+# Secrets (USERNAME/PASSWORD) and overrides live here, root-only readable.
+EnvironmentFile=/etc/ignitenet-proxy.env
+ExecStart=/usr/local/bin/ignitenet-proxy
+Restart=on-failure
+RestartSec=3
+
+# Set DIRECT=1 when this host already reaches the devices; otherwise provide
+# JUMP_ADDR (and JUMP_USER/SSH_KEY) in the EnvironmentFile for SSH tunneling.
+Environment=DIRECT=1
+Environment=LISTEN=:8881
+
+# Hardening.
+DynamicUser=yes
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+RestrictAddressFamilies=AF_INET AF_INET6
+CapabilityBoundingSet=
+
+[Install]
+WantedBy=multi-user.target
